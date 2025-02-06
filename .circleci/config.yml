@@ -20,9 +20,7 @@ jobs:
             TAG=0.1.$CIRCLE_BUILD_NUM
             docker run -d --rm -p 8080:8080 $DOCKERHUB_USERNAME/node-js-sample:$TAG
             sleep 5
-            echo "Testing the app on port 8080..."
             curl -f http://localhost:8080 || (echo "App test failed!" && exit 1)
-            echo "App responded successfully!"
 
       - run:
           name: Push Docker image
