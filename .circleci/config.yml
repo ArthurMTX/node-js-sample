@@ -1,21 +1,22 @@
 version: 2.1
-
 orbs:
-  docker: circleci/docker@2.1.1
+  docker: circleci/docker@2.8.2
 
 jobs:
-  build:
+  build-and-push:
     machine:
       image: ubuntu-2004:current
-    working_directory: ~/app
     steps:
       - checkout
-
+      - docker/check
       - docker/build:
           image: "$DOCKERHUB_USERNAME/node-js-sample"
-          dockerfile: Dockerfile
           tag: "0.1.${CIRCLE_BUILD_NUM}"
-
       - docker/push:
           image: "$DOCKERHUB_USERNAME/node-js-sample"
           tag: "0.1.${CIRCLE_BUILD_NUM}"
+          
+workflows:
+  commit:
+    jobs:
+      - build-and-push
