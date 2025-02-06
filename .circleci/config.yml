@@ -1,22 +1,25 @@
 version: 2.1
+
 orbs:
   docker: circleci/docker@2.8.2
 
 jobs:
-  build-and-push:
+  build:
     machine:
       image: ubuntu-2004:current
+    working_directory: ~/app
     steps:
       - checkout
-      - docker/check
+
       - docker/build:
           image: "$DOCKERHUB_USERNAME/node-js-sample"
+          dockerfile: Dockerfile
           tag: "0.1.${CIRCLE_BUILD_NUM}"
+
+      - run:
+          name: Forcer le login Docker
+          command: echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+
       - docker/push:
           image: "$DOCKERHUB_USERNAME/node-js-sample"
           tag: "0.1.${CIRCLE_BUILD_NUM}"
-          
-workflows:
-  commit:
-    jobs:
-      - build-and-push
