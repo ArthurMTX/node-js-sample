@@ -1,0 +1,10 @@
+services:
+  app:
+    build: .
+    container_name: my-node-app
+    ports:
+      - "8080:8080"
+    volumes:
+      - .:/usr/app
+    working_dir: /usr/app
+    command: ["npm", "start"]
